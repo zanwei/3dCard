@@ -1,21 +1,18 @@
 //场景设置
 const scene = new THREE.Scene();
 
-//渲染器设置  
+//渲染器设置
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setClearColor(0xffffff); // 设置背景色为白色
+renderer.setClearColor(0xC2C6CA);
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.shadowMap.enabled = false;
+
 document.body.appendChild( renderer.domElement );
 
 //相机设置
-const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1500 );
 camera.position.set( 0, 0, 100 );
 camera.lookAt(scene.position);
-
-//光照设置
-const light = new THREE.DirectionalLight(0xffffff, 1); 
-light.position.set( 0, 0, 10);
-scene.add(light);
 
 //加载纹理
 const textureLoader = new THREE.TextureLoader();
@@ -29,26 +26,24 @@ const mapBack = textureLoader.load('card-back.jpg', function(texture) {
 }); 
 
 //材质设置
-const materialFront = new THREE.MeshPhongMaterial({
+const materialFront = new THREE.MeshBasicMaterial({
   map: mapFront,
-  shininess: 600,
-  metalness: 2
+  color: 0xffffff,
 });
 
-const materialBack = new THREE.MeshPhongMaterial({
+const materialBack = new THREE.MeshBasicMaterial({
   map: mapBack,
-  shininess: 600,
-  metalness: 2
+  color: 0xffffff,
 });
 
 //卡片网格模型
 const geometry = new THREE.BoxGeometry(40, 26, 0.1);
 
 const meshFront = new THREE.Mesh(geometry, materialFront);
-meshFront.position.z = 0.05; //微调位置，使正反面不重叠
+meshFront.position.z = 0.06; 
 
 const meshBack = new THREE.Mesh(geometry, materialBack);
-meshBack.position.z = -0.05; //微调位置，使正反面不重叠
+meshBack.position.z = -0.06; 
 
 //使用 THREE.Group 来包含正反面
 const card = new THREE.Group();
